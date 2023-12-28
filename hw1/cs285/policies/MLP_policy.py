@@ -130,7 +130,7 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         # return more flexible objects, such as a
         # `torch.distributions.Distribution` object. It's up to you!
         #raise NotImplementedError
-        ac_mean = self.mean_net(observation)
+        ac_mean = self.mean_net(torch.Tensor(observation))
         action = torch.normal(mean=ac_mean, std=self.logstd)
 
         return action
@@ -148,7 +148,16 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         """
         # TODO: update the policy and return the loss
         l2_loss = nn.MSELoss()
-        loss = l2_loss(self.forward(observations), actions)
+
+        #loss = 0
+        #batch_size = observations.shape[0]
+        #forward_act = torch.Tensor((batch_size, actions.shape[1]))
+        #for i in range(batch_size):
+        #   forward_act = self.forward(torch.Tensor(observations[i]))
+         #   loss += l2_loss(forward_act, torch.Tensor(actions[i, :]))
+
+        loss = l2_loss(self.forward(observations), torch.Tensor(actions))
+
         return {
             # You can add extra logging information here, but keep this line
             'Training Loss': ptu.to_numpy(loss),
