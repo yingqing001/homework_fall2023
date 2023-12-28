@@ -34,12 +34,12 @@ def sample_trajectory(env, policy, max_path_length, render=False):
     
         # TODO use the most recent ob to decide what to do
         
-        ac = policy.forward(obs)
+        ac = policy.forward(ob)
         #TODO # HINT: this is a numpy array
-        ac = ac[0]
+        #ac = ac[0]
 
         # TODO: take that action and get reward and next ob
-        next_ob, rew, done, _ = env.step(ac)
+        next_ob, rew, done, _ = env.step(ac.detach().numpy())
         
         # TODO rollout can end due to done, or due to max_path_length
         steps += 1
